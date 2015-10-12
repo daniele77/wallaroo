@@ -159,8 +159,11 @@ public:
     SharedPtr operator -> ()
     {
         SharedPtr result = part.lock();
-        if ( ! result ) 
+        if ( ! result )
+        {
+            part.reset();
             throw DeletedPartError();
+        }
         return result;
     }
 
@@ -171,7 +174,10 @@ public:
     {
         const SharedPtr result = part.lock();
         if ( ! result )
+        {
+            part.reset();
             throw DeletedPartError();
+        }
         return result;
     }
 
@@ -182,7 +188,10 @@ public:
     {
         SharedPtr result = part.lock();
         if ( ! result )
+        {
+            part.reset();
             throw DeletedPartError();
+        }
         return result;
     }
 
@@ -193,7 +202,10 @@ public:
     {
         const SharedPtr result = part.lock();
         if ( ! result )
+        {
+            part.reset();
             throw DeletedPartError();
+        }
         return result;
     }
     
