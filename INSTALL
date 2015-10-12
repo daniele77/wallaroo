@@ -5,7 +5,7 @@ Requirements
 ============
 
 Wallaroo relies on a couple of Boost libraries *only* if
-- your application is compiled with a *non* C++0x compliant compiler OR
+- your application is compiled with a *non* C++11 compliant compiler OR
 - XmlConfiguration and JsonConfiguration wallaroo features are used.
 
 If you need Boost libraries, you can donwload the
@@ -14,7 +14,7 @@ and include its path when compiling your application that use Wallaroo.
 Since Wallaroo uses header-only boost libraries, you don't need to compile
 boost.
 
-If you use a C++0x compliant compiler, you only need Boost to exploit
+If you use a C++11 compliant compiler, you only need Boost to exploit
 XmlConfiguration and JsonConfiguration features.
 
 Installation
@@ -46,7 +46,7 @@ wallaroo\ .......................................The “wallaroo root directory”
 
 Now you must only remember to insert the wallaroo path when compiling your
 source code.
-If you are using a compiler that doesn't support C++0x, or if you plan to
+If you are using a compiler that doesn't support C++11, or if you plan to
 use the "XmlConfiguration" or "JsonConfiguration" features, you must also
 include the Boost Libraries path.
 
