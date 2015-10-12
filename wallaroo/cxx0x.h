@@ -78,6 +78,7 @@
     #include <boost/function.hpp>
     #include <boost/make_shared.hpp>
     #include <boost/unordered_map.hpp>
+    #define nullptr 0
     namespace cxx0x = boost;
 #endif
 

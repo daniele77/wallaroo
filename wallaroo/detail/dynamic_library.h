@@ -64,7 +64,7 @@ public:
     }
     /* Return a function pointer to the symbol @c funcName.
     * @param funcName the name of the function in the library to load.
-    * @return the function pointer to the symbol required. NULL if the symbol was not found.
+    * @return the function pointer to the symbol required. nullptr if the symbol was not found.
     */
     template < typename F >
     F GetFunction( const std::string& funcName )

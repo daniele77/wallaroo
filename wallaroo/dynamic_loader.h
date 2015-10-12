@@ -72,7 +72,7 @@ public:
         cxx0x::shared_ptr< Plugin > p( new Plugin( fileName ) );
         typedef std::vector< Descriptor >* (*Function)(void);
         Function GetClasses = p -> library.GetFunction< Function >( "GetClasses" );
-        if ( GetClasses == NULL ) throw WrongFile( fileName );
+        if ( GetClasses == nullptr ) throw WrongFile( fileName );
         std::vector< Descriptor >* descriptors = GetClasses();
         for ( std::size_t i = 0; i < descriptors -> size(); ++i )
             Class< void, void >::Register( (*descriptors)[ i ].name, (*descriptors)[ i ].create, p );

@@ -62,7 +62,7 @@ public:
     {
         FreeLibrary( libHandle );
     }
-    // Return a function pointer to the symbol funcName. NULL if the symbol was not found.
+    // Return a function pointer to the symbol funcName. nullptr if the symbol was not found.
     template < typename F >
     F GetFunction( const std::string& funcName )
     {

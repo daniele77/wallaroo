@@ -77,7 +77,7 @@ Wheel::Wheel()
     bins.push_back( _36 );
     bins.push_back( _00 );
 
-    srand( static_cast< unsigned int >( time( NULL ) ) );
+    srand( static_cast< unsigned int >( time( nullptr ) ) );
 }
 
 Wheel::~Wheel()

@@ -57,12 +57,12 @@ public:
     {
         dlclose( libHandle );
     }
-    // Return a function pointer to the symbol funcName. NULL if the symbol was not found.
+    // Return a function pointer to the symbol funcName. nullptr if the symbol was not found.
     template < typename F >
     F GetFunction( const std::string& funcName )
     {
         F f = (F)dlsym( libHandle, funcName.c_str() );
-        if ( dlerror() != NULL ) return NULL;
+        if ( dlerror() != nullptr ) return nullptr;
         return f;
     }
     /* Returns the unix filename suffix
