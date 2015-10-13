@@ -77,7 +77,6 @@ public:
     * \endcode
     * @param id The name of the element
     * @return The element.
-    * @throw ElementNotFound If the element does not exist in the catalog.
     * @throw ElementNotFound If an element with key @c id cannot be found
     *                        in the catalog.
     */
@@ -99,6 +98,24 @@ public:
             parts.insert( std::make_pair( id, dev ) );
         if ( ! result.second ) throw DuplicatedElement( id );
     }
+
+    /** Remove an element from the catalog
+    * @param id The name of the element to remove
+    * @throw ElementNotFound If an element with key @c id cannot be found
+    *                        in the catalog.
+    */
+    void Remove( const std::string& id )
+    {
+        if ( parts.erase( id ) != 1 ) throw ElementNotFound( id );
+    }
+
+    /** Remove all elements in the catalog */
+    void Clear() { parts.clear(); }
+
+    /** Returns the number of the elements contained in the catalog.
+    * @return the size of the container
+    */
+    std::size_t Size() const { return parts.size();  }
 
     /** Instantiate a class having a 2 parameters constructor and add it to the catalog
     * @param id The name of the element to create and add

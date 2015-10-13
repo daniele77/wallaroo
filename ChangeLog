@@ -1,3 +1,7 @@
+<date>: <version>
+
+        * Add Catalog::Remove, Catalog::Clear, Catalog::Size
+
 2014-10-31: Version 0.7.0
 
         * Changed Syntax: Device -> Part, Plug -> Collaborator (close issue #1)

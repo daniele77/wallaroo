@@ -197,4 +197,25 @@ BOOST_AUTO_TEST_CASE( namespaceRegistration )
     BOOST_CHECK( e == e_bis );
 }
 
+BOOST_AUTO_TEST_CASE( containerRemoveAndErase )
+{
+    Catalog catalog;
+
+    BOOST_REQUIRE_NO_THROW( catalog.Create( "x", "A1" ) );
+    BOOST_REQUIRE_NO_THROW( catalog[ "x" ] );
+    BOOST_REQUIRE_NO_THROW( catalog.Remove( "x" ) );
+    BOOST_CHECK_THROW( catalog.Remove( "x" ), ElementNotFound );
+    BOOST_CHECK_THROW( catalog[ "x" ], ElementNotFound );
+
+    BOOST_REQUIRE_NO_THROW( catalog.Create( "x", "B1", 0, std::string() ) );
+    BOOST_REQUIRE_NO_THROW( catalog.Create( "y", "C1", 1.0 ) );
+    catalog.Clear();
+    BOOST_CHECK_THROW( catalog[ "x" ], ElementNotFound );
+    BOOST_CHECK_THROW( catalog[ "y" ], ElementNotFound );
+    BOOST_CHECK( catalog.Size() == 0 );
+}
+
+// ###
+
+
 BOOST_AUTO_TEST_SUITE_END()
