@@ -100,6 +100,15 @@ namespace Foo
 
 WALLAROO_REGISTER( Foo::E1 );
 
+
+class F1 : public Part
+{
+public:
+    int F() { return 5; }
+};
+
+WALLAROO_REGISTER_NAME( "MyF", F1 );
+
 // tests
 
 BOOST_AUTO_TEST_SUITE( Creation )
@@ -195,6 +204,13 @@ BOOST_AUTO_TEST_CASE( namespaceRegistration )
     BOOST_REQUIRE_NO_THROW( e_bis = catalog[ "e" ] );
     BOOST_CHECK( e -> GetX() == 9 );
     BOOST_CHECK( e == e_bis );
+}
+
+BOOST_AUTO_TEST_CASE( customNameCreationOk )
+{
+    Catalog catalog;
+    BOOST_REQUIRE_NO_THROW( catalog.Create( "f", "MyF" ) );
+    BOOST_REQUIRE_NO_THROW( catalog[ "f" ] );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

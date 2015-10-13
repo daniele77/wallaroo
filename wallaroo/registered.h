@@ -44,6 +44,19 @@
 #define WALLAROO_TOKENPASTE(x, y) WALLAROO_TOKENPASTE_HELPER(x, y)
 /// @endcond
 
+/** This macro can be used in your implementation file (.cpp or .cc)
+* instead of WALLAROO_REGISTER to register a class specifying the ID.
+* When a class is registered, you can create an instance
+* using Catalog::Create(const std::string&,const std::string&,const P1&,const P2&).
+* @param N The class id
+* @param C The class name
+* @param ... The type of the other parameters of the class constructor
+* @hideinitializer
+*/
+#define WALLAROO_REGISTER_NAME( N, C, ... ) \
+    static const ::wallaroo::Registration< C, ##__VA_ARGS__ > WALLAROO_TOKENPASTE(__reg__,__LINE__)( N ) ;
+// NOTE: the ## before __VA_ARGS__ removes the comma when no arguments are passed
+
 /** This macro must be used in your implementation file (.cpp or .cc)
 * to register a class. When a class is registered, you can create an instance
 * using Catalog::Create(const std::string&,const std::string&,const P1&,const P2&).
@@ -52,7 +65,7 @@
 * @hideinitializer
 */
 #define WALLAROO_REGISTER( C, ... ) \
-    static const ::wallaroo::Registration< C, ##__VA_ARGS__ > WALLAROO_TOKENPASTE(__reg__,__LINE__)( #C ) ;
+    WALLAROO_REGISTER_NAME( #C, C, ##__VA_ARGS__ )
 // NOTE: the ## before __VA_ARGS__ removes the comma when no arguments are passed
 
 #endif
