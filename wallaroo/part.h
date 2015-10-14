@@ -145,7 +145,10 @@ private:
 
     // this method should only be invoked by the dependencies of this part
     // to register itself into the dependencies table.
-    template < class T, class P, template < typename E, typename Allocator = std::allocator< E > > class Container > friend class Collaborator;
+    template < class T, class P, template < typename E, 
+               typename Allocator = std::allocator< E > > class Container, 
+               template < typename X > class Ownership >
+                    friend class Collaborator;
     void Register( const std::string& id, Dependency* c )
     {
         dependencies[ id ] = c;
