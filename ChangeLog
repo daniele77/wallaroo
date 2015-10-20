@@ -2,6 +2,7 @@
 
         * Add Catalog::Remove, Catalog::Clear, Catalog::Size
         * Custom name for class registration
+        * Choice between shared and weak ptr for Collaborator
 
 2014-10-31: Version 0.7.0
 

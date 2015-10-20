@@ -60,7 +60,7 @@ public:
 public:
     Collaborator< A3 > mandatoryAttribute;
     Collaborator< A3, optional > optionalAttribute;
-    Collaborator< A3, collection > collectionAttribute;
+    Collaborator< A3, collection<> > collectionAttribute;
 };
 
 WALLAROO_REGISTER( B3 )
