@@ -45,7 +45,7 @@ public:
     GasAlarm();
     virtual void Watch();
 private:
-    typedef Collaborator< GasSensor, collection > SensorList;
+    typedef Collaborator< GasSensor, collection<> > SensorList;
     SensorList sensors;
     Collaborator< Alarm > alarm;
 };

@@ -54,15 +54,10 @@ namespace wallaroo
         cxx0x::shared_ptr< T > GetShared( const cxx0x::shared_ptr< T >& s ) { return s; }
 
         template < typename T >
-        cxx0x::shared_ptr< T > GetShared( cxx0x::weak_ptr< T >& s )
+        cxx0x::shared_ptr< T > GetShared( const cxx0x::weak_ptr< T >& s )
         {
-            cxx0x::shared_ptr< T > result = s.lock();
-            if ( !result )
-            {
-                s.reset();
-                throw DeletedPartError();
-            }
-            return result;
+            if ( cxx0x::shared_ptr< T > result = s.lock() ) return result;
+            throw DeletedPartError();
         }
 
         // overloaded utility function to check in uniform way both shared_ptr and weak_ptr
@@ -80,23 +75,23 @@ namespace wallaroo
 /// that the Collaborator is optional (i.e.: you can omit to link a part to the collaborator)
 struct optional
 {
-    template < typename T >
-    static bool WiringOk( const T& ) { return true; }
+    template < typename T > static bool WiringOk( const T& ) { return true; }
 };
 /// This type should be used as second template parameter in Collaborator class to specify
 /// that the Collaborator is mandatory (i.e.: you cannot omit to link a part to the collaborator)
 struct mandatory
 {
-    template < typename T >
-    static bool WiringOk( const cxx0x::weak_ptr< T >& t ) { return !t.expired(); }
-
-    template < typename T >
-    static bool WiringOk( const cxx0x::shared_ptr< T >& t ) { return static_cast< bool >( t ); }
+    template < typename T > static bool WiringOk( const cxx0x::weak_ptr< T >& t ) { return !t.expired(); }
+    template < typename T > static bool WiringOk( const cxx0x::shared_ptr< T >& t ) { return static_cast< bool >( t ); }
 };
 /// This type should be used as second template parameter in Collaborator class to specify
 /// that the Collaborator is a collection and you can wire the collaborator with a number 
 /// of parts greater or equal to @c MIN and lesser or equal to @c MAX
-template < std::size_t MIN = 0, std::size_t MAX = 0 >
+template <     
+    std::size_t MIN = 0,
+    std::size_t MAX = 0,
+    template < typename E, typename Allocator = std::allocator< E > > class C = std::vector
+>
 struct bounded_collection
 {
     template < typename T >
@@ -105,39 +100,40 @@ struct bounded_collection
         const std::size_t s = t -> size();
         return ( s >= MIN && ( MAX == 0 || s <= MAX ) );
     }
+    template < typename T > struct Container { typedef C< T > Type;  };
 };
 // template specializations to avoid warning about "unsigned is always >= 0":
-template < std::size_t MAX >
-struct bounded_collection< 0, MAX >
+template < std::size_t MAX, template < typename E, typename Allocator = std::allocator< E > > class C >
+struct bounded_collection< 0, MAX, C >
 {
     template < typename T >
-    static bool WiringOk( const T* t )
-    {
-        return ( t -> size() <= MAX );
-    }
+    static bool WiringOk( const T* t ) { return ( t -> size() <= MAX ); }
+    template < typename T > struct Container { typedef C< T > Type; };
 };
-template < std::size_t MIN >
-struct bounded_collection< MIN, 0 >
+template < std::size_t MIN, template < typename E, typename Allocator = std::allocator< E > > class C >
+struct bounded_collection< MIN, 0, C >
 {
     template < typename T >
-    static bool WiringOk( const T* t )
-    {
-        return ( t -> size() >= MIN );
-    }
+    static bool WiringOk( const T* t ) { return ( t -> size() >= MIN ); }
+    template < typename T > struct Container { typedef C< T > Type; };
 };
-template <>
-struct bounded_collection< 0, 0 >
+template < template < typename E, typename Allocator = std::allocator< E > > class C >
+struct bounded_collection< 0, 0, C >
 {
     template < typename T >
-    static bool WiringOk( const T* )
-    {
-        return true;
-    }
+    static bool WiringOk( const T* ) { return true; }
+    template < typename T > struct Container { typedef C< T > Type; };
 };
 /// This type should be used as second template parameter in Collaborator class
 /// to specify that the Collaborator is a collection and you can wire as many 
 /// parts to the collaborator as you want. Even zero.
-typedef bounded_collection<> collection;
+template < template < typename E, typename Allocator = std::allocator< E > > class C = std::vector >
+struct collection
+{
+    template < typename T > static bool WiringOk( const T* ) { return true; }
+    template < typename T > struct Container { typedef C< T > Type; };
+};
+
 
 
 
@@ -159,10 +155,9 @@ typedef bounded_collection<> collection;
 template <
     typename T,
     typename P = mandatory,
-    template < typename E, typename Allocator = std::allocator< E > > class Container = std::vector,
     template < typename X > class Ownership = cxx0x::weak_ptr
 >
-class Collaborator  : public Dependency
+class Collaborator : public Dependency
 {
 public:
 
@@ -235,16 +230,18 @@ private:
 // partial specialization for the collection case
 template <
     typename T,
-    template < typename E, typename Allocator = std::allocator< E > > class Container,
     std::size_t MIN,
     std::size_t MAX,
+    template < typename E, typename Allocator = std::allocator< E > > class C,
     template < typename X > class Ownership
 >
-class Collaborator< T, bounded_collection< MIN, MAX >, Container, Ownership > : public Dependency, public Container< Ownership< T > >
+class Collaborator< T, bounded_collection< MIN, MAX, C >, Ownership > : 
+    public Dependency,
+    public bounded_collection< MIN, MAX, C >::template Container< Ownership< T > >::Type
 {
 private:
     typedef Ownership< T > Ptr;
-    typedef Container< Ptr > C;
+    typedef typename bounded_collection< MIN, MAX, C >::template Container< Ptr >::Type Cont;
 
 public:
 
@@ -265,7 +262,7 @@ public:
     void Link( const cxx0x::shared_ptr< Part >& part )
     {
         if ( cxx0x::shared_ptr< T > obj = cxx0x::dynamic_pointer_cast< T >( part ) )
-            C::push_back( obj );
+            Cont::push_back( obj );
         else
             throw WrongType(); // bad type!
     }
@@ -276,7 +273,7 @@ public:
     */
     virtual bool WiringOk() const
     {
-        return bounded_collection< MIN, MAX >::WiringOk( this );
+        return bounded_collection< MIN, MAX, C >::WiringOk( this );
     }
 
 private:
@@ -284,6 +281,22 @@ private:
     Collaborator( const Collaborator& );
     Collaborator& operator = ( const Collaborator& );
 };
+
+// partial specialization for the collection case
+template <
+    typename T,
+    template < typename E, typename Allocator = std::allocator< E > > class C,
+    template < typename X > class Ownership
+>
+class Collaborator< T, collection< C >, Ownership > : 
+    public Collaborator < T, bounded_collection< 0, 0, C >, Ownership >
+{
+public:
+    Collaborator( const std::string& name, const RegToken& token ) :
+        Collaborator < T, bounded_collection< 0, 0, C >, Ownership >( name, token )
+    {}
+};
+
 
 #ifndef WALLAROO_REMOVE_DEPRECATED
 #define Plug Collaborator

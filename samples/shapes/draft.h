@@ -47,7 +47,7 @@ public:
     void Draw();
 private:
     Collaborator< Canvas > canvas;
-    Collaborator< Shape, collection > shapes;
+    Collaborator< Shape, collection<> > shapes;
 };
 
 #endif

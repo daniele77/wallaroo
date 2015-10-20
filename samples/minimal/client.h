@@ -48,8 +48,8 @@ public:
 private:
     Collaborator< Interface > relation;
     Collaborator< Interface, optional > optionalRelation;
-    Collaborator< Interface, collection > relationVector; // std::vector by default
-    Collaborator< Interface, collection, std::list > relationList; // you can specify a different container
+    Collaborator< Interface, collection<> > relationVector; // std::vector by default
+    Collaborator< Interface, collection< std::list > > relationList; // you can specify a different container
     Collaborator< Interface, bounded_collection< 1, 10 > > relationBoundedVector; // you can specify the range 
 };
 

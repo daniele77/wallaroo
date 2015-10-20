@@ -52,10 +52,8 @@ void Client::G()
 
     relation -> F();
 
-    for ( 
-        Collaborator< Interface, collection, std::list >::iterator i = relationList.begin();
-        i != relationList.end();
-        ++i )
+    typedef Collaborator< Interface, collection< std::list > >::iterator Iterator;
+    for ( Iterator i = relationList.begin(); i != relationList.end(); ++i )
     {
         cxx0x::shared_ptr< Interface > s = i -> lock();
         if ( s ) 

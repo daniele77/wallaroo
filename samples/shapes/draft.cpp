@@ -47,7 +47,7 @@ void Draft::Align()
     
     unsigned int currentX = 0;
 
-    for ( Collaborator< Shape, collection >::iterator i = shapes.begin(); i != shapes.end(); ++i )
+    for ( Collaborator< Shape, collection<> >::iterator i = shapes.begin(); i != shapes.end(); ++i )
     {
         cxx0x::shared_ptr< Shape > s = i -> lock();
         assert( s );
@@ -62,7 +62,7 @@ void Draft::Align()
 
 void Draft::Draw()
 {
-    for ( Collaborator< Shape, collection >::iterator i = shapes.begin(); i != shapes.end(); ++i )
+    for ( Collaborator< Shape, collection<> >::iterator i = shapes.begin(); i != shapes.end(); ++i )
     {
         cxx0x::shared_ptr< Shape > s = i -> lock();
         assert( s );

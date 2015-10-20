@@ -79,7 +79,7 @@ public:
     virtual ~C2() {}
 
     Collaborator< I2 > x;
-    Collaborator< I2, mandatory, std::vector, cxx0x::shared_ptr > y;
+    Collaborator< I2, mandatory, cxx0x::shared_ptr > y;
 };
 
 WALLAROO_REGISTER( C2 )
@@ -99,7 +99,7 @@ public:
     }
     virtual ~D2() {}
 private:
-    typedef Collaborator< I2, collection > Container;
+    typedef Collaborator< I2, collection<> > Container;
     Container x;
 };
 
@@ -132,9 +132,9 @@ public:
     }
     virtual ~E2() {}
 private:
-    typedef Collaborator< I2, collection, std::list > Container1;
-    typedef Collaborator< I2, collection, std::vector > Container2;
-    typedef Collaborator< I2, collection, std::deque > Container3;
+    typedef Collaborator< I2, collection< std::list > > Container1;
+    typedef Collaborator< I2, collection< std::vector > > Container2;
+    typedef Collaborator< I2, collection< std::deque > > Container3;
     Container1 x1;
     Container2 x2;
     Container3 x3;
@@ -382,10 +382,10 @@ BOOST_AUTO_TEST_CASE( containersWiring )
     using std::list;
     typedef weak_ptr< I2 > I2Ptr;
 
-    BOOST_STATIC_ASSERT((is_base_of< deque< I2Ptr >, Collaborator< I2, collection, deque > >::value));
-    BOOST_STATIC_ASSERT((is_base_of< list< I2Ptr >, Collaborator< I2, collection, list > >::value));
-    BOOST_STATIC_ASSERT((is_base_of< vector< I2Ptr >, Collaborator< I2, collection, vector > >::value));
-    BOOST_STATIC_ASSERT((is_base_of< vector< I2Ptr >, Collaborator< I2, collection > >::value)); // the default is std::vector
+    BOOST_STATIC_ASSERT((is_base_of< deque< I2Ptr >, Collaborator< I2, collection< deque > > >::value));
+    BOOST_STATIC_ASSERT((is_base_of< list< I2Ptr >, Collaborator< I2, collection< list > > >::value));
+    BOOST_STATIC_ASSERT((is_base_of< vector< I2Ptr >, Collaborator< I2, collection< vector > > >::value));
+    BOOST_STATIC_ASSERT((is_base_of< vector< I2Ptr >, Collaborator< I2, collection<> > >::value)); // the default is std::vector
 }
 
 BOOST_AUTO_TEST_CASE( checkCast )

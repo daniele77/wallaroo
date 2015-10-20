@@ -44,7 +44,7 @@ public:
     ConsolePlayer();
     virtual cxx0x::shared_ptr< Bet > NextBet();
 private:
-    typedef Collaborator< BetConsoleFactory, collection > BetFactories;
+    typedef Collaborator< BetConsoleFactory, collection<> > BetFactories;
     BetFactories availableBets;
 };
 
