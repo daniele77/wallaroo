@@ -1,6 +1,7 @@
 <date>: <version>
 
         * Add Catalog::Remove, Catalog::Clear, Catalog::Size
+        * Custom name for class registration
 
 2014-10-31: Version 0.7.0
 
