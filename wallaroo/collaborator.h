@@ -86,7 +86,8 @@ struct mandatory
 };
 /// This type should be used as second template parameter in Collaborator class to specify
 /// that the Collaborator is a collection and you can wire the collaborator with a number 
-/// of parts greater or equal to @c MIN and lesser or equal to @c MAX
+/// of parts greater or equal to @c MIN and lesser or equal to @c MAX.
+/// You can also specify the container to use with the thirth template parameter (default is std::vector)
 template <     
     std::size_t MIN = 0,
     std::size_t MAX = 0,
@@ -127,6 +128,7 @@ struct bounded_collection< 0, 0, C >
 /// This type should be used as second template parameter in Collaborator class
 /// to specify that the Collaborator is a collection and you can wire as many 
 /// parts to the collaborator as you want. Even zero.
+/// You can specify the container to use with the optional template parameter (default is std::vector)
 template < template < typename E, typename Allocator = std::allocator< E > > class C = std::vector >
 struct collection
 {
@@ -145,9 +147,12 @@ struct collection
  * basically get a pointer to part2.
  *
  * @tparam T The type of the Part contained
- * @tparam P This represents the kind of Collaborator (@ref mandatory if you must link a part,
+ * @tparam P This represents the kind of Collaborator
+            (@ref mandatory if you must link a part (this is the default),
  *           @ref optional if you can leave this collaborator unlinked,
- *           @ref collection if you can link many parts to this collaborator)
+ *           @ref collection if you can link many parts to this collaborator,
+ *           @ref bounded_collection if you need to specify the lower and/or upper bound
+ *                for the number of parts you can link to this collaborator).
  * @tparam Container If P = @ref collection, this represents the std container
  *           the Collaborator will derive from.
  * @tparam Ownership
@@ -296,11 +301,6 @@ public:
         Collaborator < T, bounded_collection< 0, 0, C >, Ownership >( name, token )
     {}
 };
-
-
-#ifndef WALLAROO_REMOVE_DEPRECATED
-#define Plug Collaborator
-#endif
 
 }
 
