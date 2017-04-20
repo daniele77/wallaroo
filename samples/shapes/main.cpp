@@ -34,6 +34,7 @@
 #include "wallaroo/catalog.h"
 #include "wallaroo/jsonconfiguration.h"
 #include "wallaroo/xmlconfiguration.h"
+#include "wallaroo/configuration.h"
 #include "draft.h"
 
 // Wallaroo library is embedded in the wallaroo namespace
@@ -49,7 +50,8 @@ int main( int argc, char* argv[] )
     {
         Catalog catalog;
 
-        JsonConfiguration appCfg( "application.json" );
+        //JsonConfiguration appCfg( "application.json" );
+        Configuration appCfg( "application.wal" );
         XmlConfiguration draftCfg( "draft.xml" );
 
         appCfg.Fill( catalog );
