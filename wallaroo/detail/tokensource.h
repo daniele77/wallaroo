@@ -56,8 +56,8 @@ struct Token
         attrsep,    // ,
         assign,     // =
         collsep,    // .
-        id,         // <id>
-        value,      // <value>
+        id,         // <id>     [a-zA-Z_] [a-zA-Z0-9_:<>]*
+        value,      // true | false | \'{char}\' | \"{char}*\" | [0-9+-]?[0-9]+\.[0-9]+
         done        // EOF
     };
     Type type;
@@ -116,6 +116,17 @@ public:
                 case ',': Consume(); return Token( Token::attrsep ); break;
                 case '=': Consume(); return Token( Token::assign ); break;
                 case '.': Consume(); return Token( Token::collsep ); break;
+                case '\'': 
+                    {
+                        Consume(); // '
+                        c = input.peek();
+                        // TODO manage quoted chars
+                        Consume(); // char
+                        if ( input.peek() == '\'' ) Consume(); // '
+                        else throw LexicalError( "Missing terminating char closing", lineno, column );
+                        return Token( Token::value, std::string( 1, c ) );
+                    }
+                    break;
                 case '"':
                     {
                         std::string value;
@@ -152,7 +163,7 @@ public:
                     if ( isalpha( c ) || c == '_' )
                     {
                         std::string id;
-                        while ( isalnum( c ) || c == '_' )
+                        while ( isalnum( c ) || c == '_' || c == ':' || c == '<' || c == '>' )
                         {
                             id += c;
                             Consume();
@@ -160,14 +171,20 @@ public:
                         }
                         if ( id == "load" ) return Token( Token::load );
                         else if ( id == "new" ) return Token( Token::create );
+                        else if ( id == "true" || id == "false" ) return Token( Token::value, id );
                         else return Token( Token::id, id );
                     }
                     else if ( input.eof() )
                         return Token( Token::done );
-                    else if ( isdigit( c ) )
+                    else if ( isdigit( c ) || c == '-' || c == '+' )
                     {
                         std::string num;
                         std::size_t sepcount = 0;
+
+                        num += c;
+                        Consume();
+                        c = input.peek(); // next char...
+
                         while ( isdigit( c ) || c == '.' )
                         {
                             if ( c == '.' ) 

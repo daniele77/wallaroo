@@ -71,6 +71,7 @@ CPPFLAGS = $(COMPILE_FLAGS) $(DIR_INCLUDE)
 
 EXE_OBJ_FILES= \
     test_cfg_file.obj \
+    test_wal_file.obj \
     test_multiplicitycheck.obj \
     test_wiring.obj \
     test_creation.obj \

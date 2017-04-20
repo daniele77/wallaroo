@@ -188,6 +188,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\test_wal_file.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\test_creation.cpp"
 				>
 			</File>

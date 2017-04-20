@@ -87,13 +87,10 @@
   <ItemGroup>
     <ClCompile Include="driver.cpp" />
     <ClCompile Include="test_attributes.cpp" />
-    <ClCompile Include="test_cfg_file.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="test_cfg_file.cpp" />
+    <ClCompile Include="test_wal_file.cpp" />
     <ClCompile Include="test_creation.cpp" />
-    <ClCompile Include="test_dynamiclib.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="test_dynamiclib.cpp" />
     <ClCompile Include="test_multiplicitycheck.cpp" />
     <ClCompile Include="test_wiring.cpp" />
   </ItemGroup>

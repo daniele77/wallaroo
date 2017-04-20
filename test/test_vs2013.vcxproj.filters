@@ -30,6 +30,9 @@
     <ClCompile Include="test_cfg_file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_wal_file.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="test_dynamiclib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

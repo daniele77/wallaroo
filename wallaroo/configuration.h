@@ -47,9 +47,14 @@ namespace wallaroo
 class Configuration
 {
 public:
+    /** Create a Configuration from the path specified as parameter.
+    * @param fileName The path of the file to parse
+    * @throw WrongFile If the file does not exist or its format is wrong.
+    */
     explicit Configuration( const std::string& file ) 
     {
         std::ifstream f( file.c_str() );
+        if ( !f ) throw WrongFile( file + " not found" );
         detail::Grammar< Configuration > g( f, *this );
         g.Parse();
     }
@@ -95,26 +100,26 @@ private:
     {
         Object( const std::string& i, const std::string& c ) :
             instance( i ), type( c ) {}
-        const std::string instance;
-        const std::string type;
+        std::string instance;
+        std::string type;
     };
 
     struct Attribute
     {
         Attribute( const std::string& obj, const std::string& att, const std::string& v ) :
             object( obj ), attribute( att ), value( v ) {}
-        const std::string object;
-        const std::string attribute;
-        const std::string value;
+        std::string object;
+        std::string attribute;
+        std::string value;
     };
 
     struct Dependency
     {
         Dependency( const std::string& obj, const std::string& dep, const std::string& v ) :
             object( obj ), dependency( dep ), value( v ) {}
-        const std::string object;
-        const std::string dependency;
-        const std::string value;
+        std::string object;
+        std::string dependency;
+        std::string value;
     };
 
     // Grammar callbacks:

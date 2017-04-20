@@ -409,10 +409,10 @@ BOOST_AUTO_TEST_CASE( checkCast )
     shared_ptr< F2 > f1 = catalog[ "f1" ];
     shared_ptr< F2 > f2 = catalog[ "f2" ];
 
-    BOOST_REQUIRE_NO_THROW( static_cast< shared_ptr< I2 > >( f1 -> collaborator ) );
-    BOOST_REQUIRE_NO_THROW( static_cast< const shared_ptr< I2 > >( f1 -> collaborator ) );
-    BOOST_REQUIRE_NO_THROW( static_cast< shared_ptr< I2 > >( f2 -> collaborator ) );
-    BOOST_REQUIRE_NO_THROW( static_cast< const shared_ptr< I2 > >( f2 -> collaborator ) );
+    BOOST_REQUIRE_NO_THROW( shared_ptr< I2 > x = static_cast< shared_ptr< I2 > >( f1 -> collaborator ) );
+    BOOST_REQUIRE_NO_THROW( shared_ptr< I2 > x = static_cast< const shared_ptr< I2 > >( f1 -> collaborator ) );
+    BOOST_REQUIRE_NO_THROW( shared_ptr< I2 > x = static_cast< shared_ptr< I2 > >( f2 -> collaborator ) );
+    BOOST_REQUIRE_NO_THROW( shared_ptr< I2 > x = static_cast< const shared_ptr< I2 > >( f2 -> collaborator ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
