@@ -59,5 +59,6 @@ Release
 *.sdf
 *.opensdf
 *.xcodeproj
+.vs
 #*#
 *~
