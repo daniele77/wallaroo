@@ -44,6 +44,7 @@ namespace detail
 
 /////////////////////////////////////////////////////////////////////////////////
 
+// Represent a token when scanning a .wal configuration file
 struct Token
 {
     // terminals
@@ -63,6 +64,7 @@ struct Token
     Type type;
     std::string lexem;
     Token( Type t, const std::string& l = std::string() ) : type( t ), lexem( l ) {}
+    // return a string explaining the type of a token
     static std::string Description( Type t )
     {
         switch ( t )
@@ -79,28 +81,18 @@ struct Token
             case value: return "<value>"; break;
             case done: return "<EOF>"; break;
         }
-        return "???";
+        return "???"; // can't reach this point
     }
 };
 
-class LexicalError : public WallarooError
-{
-public:
-    LexicalError( const std::string& msg, std::size_t line, std::size_t col ) :
-        WallarooError( FormatMsg( msg, line, col ) ) {}
-private:
-    static std::string FormatMsg( const std::string& msg, std::size_t line, std::size_t col )
-    {
-        std::ostringstream oss;
-        oss << "Line " << line << ", col " << col << ": " << msg;
-        return oss.str();
-    }
-};
-
+// Split an input stream into a sequence of token.
+// Each call at Split::Next method returns the next token
+// (or throws a LexicalError if the next token is unknown).
 class TokenSource
 {
 public:
     explicit TokenSource( std::istream& in ) : input( in ), lineno( 1 ), column( 1 ) {}
+    // throw LexicalError
     Token Next()
     {
         while ( true )

@@ -83,20 +83,6 @@ terminals:
     done
 */
 
-class SyntaxError : public WallarooError 
-{
-public:
-    SyntaxError( const std::string& msg, std::size_t line, std::size_t col ) :
-        WallarooError( FormatMsg( msg, line, col ) ) {}
-private:
-    static std::string FormatMsg( const std::string& msg, std::size_t line, std::size_t col )
-    {
-        std::ostringstream oss;
-        oss << "Line " << line << ", col " << col << ": " << msg;
-        return oss.str();
-    }
-};
-
 template < typename SemanticActions >
 class Grammar
 {
@@ -104,6 +90,8 @@ public:
     Grammar( std::istream& in, SemanticActions& sa ) : 
         input( in ), lookahead( Token::done ), actions( sa ) 
     {}
+
+    // throws SyntaxError
     // start -> list <done>
     // list -> statement <stmtsep> list | <empty>
     void Parse()

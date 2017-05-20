@@ -47,6 +47,7 @@ OBJ := test_cfg_file.o \
        test_creation.o \
        test_dynamiclib.o \
        test_attributes.o \
+       test_tokensource.o \
        driver.o
 OBJ_PLUGIN := plugin.o plugin_ext.o
 OBJ_PLUGIN2 := plugin2.o
