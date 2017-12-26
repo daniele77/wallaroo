@@ -88,6 +88,7 @@
     <ClCompile Include="driver.cpp" />
     <ClCompile Include="test_attributes.cpp" />
     <ClCompile Include="test_cfg_file.cpp" />
+    <ClCompile Include="test_grammar.cpp" />
     <ClCompile Include="test_tokensource.cpp" />
     <ClCompile Include="test_wal_file.cpp" />
     <ClCompile Include="test_creation.cpp" />

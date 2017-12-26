@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(Comments)
 BOOST_AUTO_TEST_CASE(TokensType)
 {
     std::stringstream s;
-    s << " \t  load \n"
+    s << " \t  @load \n"
         << "     new(); \n"
         << ", = . foo 42";
     TokenSource ts(s);

@@ -29,7 +29,7 @@
  # DEALINGS IN THE SOFTWARE.
 
 
-load "plugin2";
+@load "plugin2";
 
 a = new A8;
 a1 = new A8();

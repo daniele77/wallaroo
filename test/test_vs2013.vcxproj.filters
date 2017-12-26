@@ -42,6 +42,9 @@
     <ClCompile Include="test_tokensource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_grammar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\wallaroo\catalog.h">

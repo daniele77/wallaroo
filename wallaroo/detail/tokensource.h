@@ -49,7 +49,7 @@ struct Token
 {
     // terminals
     enum Type { 
-        load,       // load
+        load,       // @load
         create,     // new
         open,       // (
         close,      // )
@@ -69,7 +69,7 @@ struct Token
     {
         switch ( t )
         {
-            case load: return "load"; break;
+            case load: return "@load"; break;
             case create: return "new"; break;
             case open: return "("; break;
             case close: return ")"; break;
@@ -161,10 +161,21 @@ public:
                             Consume();
                             c = input.peek(); // next char...
                         }
-                        if ( id == "load" ) return Token( Token::load );
-                        else if ( id == "new" ) return Token( Token::create );
+                        if ( id == "new" ) return Token( Token::create );
                         else if ( id == "true" || id == "false" ) return Token( Token::value, id );
                         else return Token( Token::id, id );
+                    }
+                    else if (c == '@')
+                    {
+                        std::string id;
+                        while (isalnum(c) || c == '@')
+                        {
+                            id += c;
+                            Consume();
+                            c = input.peek(); // next char...
+                        }
+                        if (id == "@load") return Token(Token::load);
+                        throw LexicalError("Invalid keyword:" + id, lineno, column);
                     }
                     else if ( input.eof() )
                         return Token( Token::done );
