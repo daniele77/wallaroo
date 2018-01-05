@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{FB4A7143-2252-49AA-BCB1-35D0D19DC25C}</ProjectGuid>
-    <RootNamespace>cpp0x_only_vs2013</RootNamespace>
+    <ProjectGuid>{8B935FA9-CDF1-43CF-8C2B-3C9D5CBC928B}</ProjectGuid>
+    <RootNamespace>test</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -38,16 +38,29 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;$(BOOST)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(BOOST)/stage/lib</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>"$(TargetDir)\$(TargetName).exe" --result_code=no --report_level=short</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Auto Run Test</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -55,25 +68,49 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;$(BOOST)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(BOOST)/stage/lib</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>"$(TargetDir)\$(TargetName).exe" --result_code=no --report_level=short</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Auto Run Test</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="base.h" />
-    <ClInclude Include="client.h" />
-    <ClInclude Include="derived.h" />
-    <ClInclude Include="interface.h" />
+    <ClCompile Include="driver.cpp" />
+    <ClCompile Include="test_attributes.cpp" />
+    <ClCompile Include="test_cfg_file.cpp" />
+    <ClCompile Include="test_grammar.cpp" />
+    <ClCompile Include="test_tokensource.cpp" />
+    <ClCompile Include="test_wal_file.cpp" />
+    <ClCompile Include="test_creation.cpp" />
+    <ClCompile Include="test_dynamiclib.cpp" />
+    <ClCompile Include="test_multiplicitycheck.cpp" />
+    <ClCompile Include="test_wiring.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="base.cpp" />
-    <ClCompile Include="client.cpp" />
-    <ClCompile Include="derived.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClInclude Include="..\wallaroo\attribute.h" />
+    <ClInclude Include="..\wallaroo\catalog.h" />
+    <ClInclude Include="..\wallaroo\class.h" />
+    <ClInclude Include="..\wallaroo\dependency.h" />
+    <ClInclude Include="..\wallaroo\cxx0x.h" />
+    <ClInclude Include="..\wallaroo\deserializable_value.h" />
+    <ClInclude Include="..\wallaroo\part.h" />
+    <ClInclude Include="..\wallaroo\dynamic_lib.h" />
+    <ClInclude Include="..\wallaroo\dynamic_loader.h" />
+    <ClInclude Include="..\wallaroo\exceptions.h" />
+    <ClInclude Include="..\wallaroo\jsonconfiguration.h" />
+    <ClInclude Include="..\wallaroo\collaborator.h" />
+    <ClInclude Include="..\wallaroo\registered.h" />
+    <ClInclude Include="..\wallaroo\xmlconfiguration.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

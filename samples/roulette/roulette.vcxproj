@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D42E6653-1C26-4702-9B8F-D97609D1411C}</ProjectGuid>
-    <RootNamespace>shapes_vs2013</RootNamespace>
+    <ProjectGuid>{F0F485F1-F94A-4BE3-8951-2BB968CA4583}</ProjectGuid>
+    <RootNamespace>roulette</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -43,7 +43,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../..;$(BOOST)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../..</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -55,7 +55,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../..;$(BOOST)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../..</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -64,24 +64,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="box.h" />
-    <ClInclude Include="canvas.h" />
-    <ClInclude Include="circle.h" />
-    <ClInclude Include="consolecanvas.h" />
-    <ClInclude Include="csvfilecanvas.h" />
-    <ClInclude Include="draft.h" />
-    <ClInclude Include="rectangle.h" />
-    <ClInclude Include="shape.h" />
-    <ClInclude Include="triangle.h" />
+    <ClInclude Include="bet.h" />
+    <ClInclude Include="betconsolefactory.h" />
+    <ClInclude Include="bin.h" />
+    <ClInclude Include="consoleplayer.h" />
+    <ClInclude Include="currency.h" />
+    <ClInclude Include="game.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="straightbet.h" />
+    <ClInclude Include="straightbetconsolefactory.h" />
+    <ClInclude Include="wheel.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="circle.cpp" />
-    <ClCompile Include="consolecanvas.cpp" />
-    <ClCompile Include="csvfilecanvas.cpp" />
-    <ClCompile Include="draft.cpp" />
+    <ClCompile Include="consoleplayer.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="rectangle.cpp" />
-    <ClCompile Include="triangle.cpp" />
+    <ClCompile Include="wheel.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

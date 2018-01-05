@@ -16,7 +16,7 @@ Introduction
 ============
 
 Wallaroo is a lightweight yet powerful library for configurable creation
-and wiring of C++ classes
+and wiring of C++ classes.
 
 With Wallaroo you will be able to separate the setup phase (object building
 and wiring) from the logic of your classes. In addition, you will be able to
