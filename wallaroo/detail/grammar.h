@@ -46,16 +46,16 @@ namespace detail
 /*
 GRAMMAR
 
-    start        -> list <done>
-    list         -> statement <stmtsep> list | <empty>
-    statement    -> loadexpr | assignexpr
-    assignexpr   -> <id> <assign> rvalue
-    rvalue       -> <create> <id> <optparamlist> | <value>
-    loadexpr     -> <load> <value>
-    optparamlist -> <empty> | <open> attrlist <close>
-    attrlist     -> <empty> | attrassign moreattrassign
-    moreattrassign -> <empty> | <attrsep> attrassign
-    assignexpr   -> <id> <collsep> <id> <assign> <id>
+    start          ->  list <done>
+    list           ->  statement <stmtsep> list | <empty>
+    statement      ->  loadexpr | assignexpr
+    loadexpr       ->  <load> <value>
+    assignexpr     ->  <id> <assign> <create> <id> <optparamlist> | <id> depexpr
+    optparamlist   ->  <empty> | <open> attrlist <close>
+    attrlist       ->  <empty> | attrassign moreattrassign
+    attrassign     ->  <id> <assign> <value>
+    moreattrassign ->  <empty> | <attrsep> attrassign    
+    depexpr        ->  <collsep> <id> <assign> <id>
 
 e.g.:
     load value;
@@ -83,38 +83,6 @@ terminals:
     done
 */
 
-/*
-    start        -> list <done>
-    list         -> statement <stmtsep> list | <empty>
-    statement    -> loadexpr | <id> assignexpr
-
-    loadexpr     -> <load> <value>   [load "pippo.so"]
-
-    assignexpr   -> <assign> createexpr | depexpr
-
-    createexpr   -> <assign> <create> <id> <optparamlist>
-    optparamlist -> <empty> | <open> attrlist <close>
-    attrlist     -> <empty> | attrassign moreattrassign
-    moreattrassign -> <empty> | <attrsep> attrassign
-
-    depexpr      -> <collsep> <id> <assign> <id>
-*/
-
-
-class SyntaxError : public WallarooError 
-{
-public:
-    SyntaxError( const std::string& msg, std::size_t line, std::size_t col ) :
-        WallarooError( FormatMsg( msg, line, col ) ) {}
-private:
-    static std::string FormatMsg( const std::string& msg, std::size_t line, std::size_t col )
-    {
-        std::ostringstream oss;
-        oss << "Line " << line << ", col " << col << ": " << msg;
-        return oss.str();
-    }
-};
-
 template < typename SemanticActions >
 class Grammar
 {
@@ -122,6 +90,10 @@ public:
     Grammar( std::istream& in, SemanticActions& sa ) : 
         input( in ), lookahead( Token::done ), actions( sa ) 
     {}
+
+    // throws SyntaxError
+    // start -> list <done>
+    // list -> statement <stmtsep> list | <empty>
     void Parse()
     {
         lookahead = input.Next();
@@ -132,6 +104,7 @@ public:
         }
     }
 private:
+    // statement -> loadexpr | assignexpr
     void Statement()
     {
         switch ( lookahead.type )
@@ -142,6 +115,7 @@ private:
                 throw SyntaxError( "expecting load, create or id", input.Line(), input.Col() ); // TODO: expecting load, create or id
         }
     }
+    // loadexpr -> <load> <value>
     void LoadExpr()
     {
         Match( Token::load );
@@ -149,6 +123,12 @@ private:
         Match( Token::value );
         actions.Load( value );
     }
+    // assignexpr     ->  <id> <assign> <create> <id> <optparamlist> | <id> depexpr
+    // optparamlist   ->  <empty> | <open> attrlist <close>
+    // attrlist       ->  <empty> | attrassign moreattrassign
+    // attrassign     ->  <id> <assign> <value>
+    // moreattrassign ->  <empty> | <attrsep> attrassign    
+    // depexpr        ->  <collsep> <id> <assign> <id>
     void AssignExpr()
     {
         const std::string lvalue = NextLexem();

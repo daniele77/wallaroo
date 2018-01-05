@@ -63,6 +63,15 @@ namespace detail
         }
     }
 
+    // T is an unsigned char
+    template <>
+    inline void String2Value< unsigned char >( const std::string& v, unsigned char& value )
+    {
+        unsigned int x;
+        String2Value( v, x );
+        value = x;
+    }
+
     // T is a string. No conversion needed
     template <>
     inline void String2Value< std::string >( const std::string& v, std::string& value )

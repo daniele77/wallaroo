@@ -70,7 +70,10 @@ RM = del /F /Q 2> nul
 CPPFLAGS = $(COMPILE_FLAGS) $(DIR_INCLUDE)
 
 EXE_OBJ_FILES= \
+    test_tokensource.obj \
+    test_grammar.obj \
     test_cfg_file.obj \
+    test_wal_file.obj \
     test_multiplicitycheck.obj \
     test_wiring.obj \
     test_creation.obj \

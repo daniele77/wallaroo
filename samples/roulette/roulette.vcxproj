@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -11,20 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6D16118A-AD8F-4ADC-A8CA-9403508F9BA7}</ProjectGuid>
-    <RootNamespace>minimal_vs2013</RootNamespace>
+    <ProjectGuid>{F0F485F1-F94A-4BE3-8951-2BB968CA4583}</ProjectGuid>
+    <RootNamespace>roulette</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -64,16 +64,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="base.h" />
-    <ClInclude Include="client.h" />
-    <ClInclude Include="derived.h" />
-    <ClInclude Include="interface.h" />
+    <ClInclude Include="bet.h" />
+    <ClInclude Include="betconsolefactory.h" />
+    <ClInclude Include="bin.h" />
+    <ClInclude Include="consoleplayer.h" />
+    <ClInclude Include="currency.h" />
+    <ClInclude Include="game.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="straightbet.h" />
+    <ClInclude Include="straightbetconsolefactory.h" />
+    <ClInclude Include="wheel.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="base.cpp" />
-    <ClCompile Include="client.cpp" />
-    <ClCompile Include="derived.cpp" />
+    <ClCompile Include="consoleplayer.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="wheel.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

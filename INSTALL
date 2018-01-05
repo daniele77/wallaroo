@@ -87,7 +87,7 @@ Compilation of the samples
 You can find some examples in the directory samples. Each example comes with:
 * GNU makefile
 * Windows makefile (nmake)
-* Visual Studio 2013 Solution File
+* Visual Studio Solution File
 
 Where needed (i.e., C++98 compiler or samples using XmlConfiguration/JsonConfiguration
 features) you can specify the boost library path in the following ways:
@@ -102,7 +102,7 @@ features) you can specify the boost library path in the following ways:
     Then, from a visual studio console, use the command:
         nmake /f makefile.win32
 
-* Visual Studio 2013 Solution File
+* Visual Studio Solution File
     Set the environment variable BOOST.
 
 Compilation of the Doxygen documentation

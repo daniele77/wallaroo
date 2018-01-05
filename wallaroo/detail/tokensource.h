@@ -44,11 +44,12 @@ namespace detail
 
 /////////////////////////////////////////////////////////////////////////////////
 
+// Represent a token when scanning a .wal configuration file
 struct Token
 {
     // terminals
     enum Type { 
-        load,       // load
+        load,       // @load
         create,     // new
         open,       // (
         close,      // )
@@ -56,18 +57,19 @@ struct Token
         attrsep,    // ,
         assign,     // =
         collsep,    // .
-        id,         // <id>
-        value,      // <value>
+        id,         // <id>     [a-zA-Z_] [a-zA-Z0-9_:<>]*
+        value,      // true | false | \'{char}\' | \"{char}*\" | [0-9+-]?[0-9]+\.[0-9]+
         done        // EOF
     };
     Type type;
     std::string lexem;
     Token( Type t, const std::string& l = std::string() ) : type( t ), lexem( l ) {}
+    // return a string explaining the type of a token
     static std::string Description( Type t )
     {
         switch ( t )
         {
-            case load: return "load"; break;
+            case load: return "@load"; break;
             case create: return "new"; break;
             case open: return "("; break;
             case close: return ")"; break;
@@ -79,28 +81,18 @@ struct Token
             case value: return "<value>"; break;
             case done: return "<EOF>"; break;
         }
-        return "???";
+        return "???"; // can't reach this point
     }
 };
 
-class LexicalError : public WallarooError
-{
-public:
-    LexicalError( const std::string& msg, std::size_t line, std::size_t col ) :
-        WallarooError( FormatMsg( msg, line, col ) ) {}
-private:
-    static std::string FormatMsg( const std::string& msg, std::size_t line, std::size_t col )
-    {
-        std::ostringstream oss;
-        oss << "Line " << line << ", col " << col << ": " << msg;
-        return oss.str();
-    }
-};
-
+// Split an input stream into a sequence of token.
+// Each call at Split::Next method returns the next token
+// (or throws a LexicalError if the next token is unknown).
 class TokenSource
 {
 public:
     explicit TokenSource( std::istream& in ) : input( in ), lineno( 1 ), column( 1 ) {}
+    // throw LexicalError
     Token Next()
     {
         while ( true )
@@ -116,6 +108,17 @@ public:
                 case ',': Consume(); return Token( Token::attrsep ); break;
                 case '=': Consume(); return Token( Token::assign ); break;
                 case '.': Consume(); return Token( Token::collsep ); break;
+                case '\'': 
+                    {
+                        Consume(); // '
+                        c = input.peek();
+                        // TODO manage quoted chars
+                        Consume(); // char
+                        if ( input.peek() == '\'' ) Consume(); // '
+                        else throw LexicalError( "Missing terminating char closing", lineno, column );
+                        return Token( Token::value, std::string( 1, c ) );
+                    }
+                    break;
                 case '"':
                     {
                         std::string value;
@@ -152,22 +155,39 @@ public:
                     if ( isalpha( c ) || c == '_' )
                     {
                         std::string id;
-                        while ( isalnum( c ) || c == '_' )
+                        while ( isalnum( c ) || c == '_' || c == ':' || c == '<' || c == '>' )
                         {
                             id += c;
                             Consume();
                             c = input.peek(); // next char...
                         }
-                        if ( id == "load" ) return Token( Token::load );
-                        else if ( id == "new" ) return Token( Token::create );
+                        if ( id == "new" ) return Token( Token::create );
+                        else if ( id == "true" || id == "false" ) return Token( Token::value, id );
                         else return Token( Token::id, id );
+                    }
+                    else if (c == '@')
+                    {
+                        std::string id;
+                        while (isalnum(c) || c == '@')
+                        {
+                            id += c;
+                            Consume();
+                            c = input.peek(); // next char...
+                        }
+                        if (id == "@load") return Token(Token::load);
+                        throw LexicalError("Invalid keyword:" + id, lineno, column);
                     }
                     else if ( input.eof() )
                         return Token( Token::done );
-                    else if ( isdigit( c ) )
+                    else if ( isdigit( c ) || c == '-' || c == '+' )
                     {
                         std::string num;
                         std::size_t sepcount = 0;
+
+                        num += c;
+                        Consume();
+                        c = input.peek(); // next char...
+
                         while ( isdigit( c ) || c == '.' )
                         {
                             if ( c == '.' ) 
