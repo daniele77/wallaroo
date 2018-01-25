@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -34,6 +34,7 @@
 #include "wallaroo/catalog.h"
 #include "wallaroo/jsonconfiguration.h"
 #include "wallaroo/xmlconfiguration.h"
+#include "wallaroo/configuration.h"
 #include "draft.h"
 
 // Wallaroo library is embedded in the wallaroo namespace
@@ -49,7 +50,8 @@ int main( int argc, char* argv[] )
     {
         Catalog catalog;
 
-        JsonConfiguration appCfg( "application.json" );
+        //JsonConfiguration appCfg( "application.json" );
+        Configuration appCfg( "application.wal" );
         XmlConfiguration draftCfg( "draft.xml" );
 
         appCfg.Fill( catalog );

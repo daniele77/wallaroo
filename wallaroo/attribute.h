@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -61,6 +61,15 @@ namespace detail
             // error: didn't convert to T
             throw WrongType();
         }
+    }
+
+    // T is an unsigned char
+    template <>
+    inline void String2Value< unsigned char >( const std::string& v, unsigned char& value )
+    {
+        unsigned int x;
+        String2Value( v, x );
+        value = x;
     }
 
     // T is a string. No conversion needed

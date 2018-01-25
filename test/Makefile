@@ -3,7 +3,7 @@
 # Copyright (C) 2012 Daniele Pallastrelli
 #
 # This file is part of wallaroo.
-# For more information, see http://wallaroo.googlecode.com/
+# For more information, see http://wallaroolib.sourceforge.net/
 #
 # Boost Software License - Version 1.0 - August 17th, 2003
 #
@@ -31,22 +31,24 @@
 ################################################################################
 
 # usage:
-# make BOOST=<BOOST_DIR>
+# make BOOST_INC=<BOOST_INCLUDE_DIR> BOOST_LIB=<BOOST_LIB_DIR>
 # or
-# make BOOST=<BOOST_DIR> CXXFLAGS=-std=c++0x
+# make BOOST_INC=<BOOST_INCLUDE_DIR> BOOST_LIB=<BOOST_LIB_DIR> CXXFLAGS=-std=c++0x
 
 override RUN_OPT += --build_info --report_level=short
 
-# override CXXFLAGS += -Wall -I.. -DBOOST_TEST_DYN_LINK -I$(BOOST)
-override CXXFLAGS += -Wall -Wextra -Werror -I.. -DBOOST_TEST_DYN_LINK -isystem $(BOOST)
-override LDFLAGS += -L$(BOOST)/stage/lib -lboost_unit_test_framework -ldl
+override CXXFLAGS += -Wall -Wextra -Werror -I.. -DBOOST_TEST_DYN_LINK -isystem $(BOOST_INC)
+override LDFLAGS += -L$(BOOST_LIB) -lboost_unit_test_framework -ldl
 
 OBJ := test_cfg_file.o \
+       test_wal_file.o \
        test_multiplicitycheck.o \
        test_wiring.o \
        test_creation.o \
        test_dynamiclib.o \
        test_attributes.o \
+       test_tokensource.o \
+       test_grammar.o \
        driver.o
 OBJ_PLUGIN := plugin.o plugin_ext.o
 OBJ_PLUGIN2 := plugin2.o
@@ -74,7 +76,7 @@ $(PLUGIN2): $(OBJ_PLUGIN2)
 	$(LINK.cc) -fPIC -shared -Wl,-E -Wl,-soname,$@ -o $@ $^
 
 test:
-	export LD_LIBRARY_PATH=.:$(BOOST)/stage/lib ; ./$(EXE) $(RUN_OPT)
+	export LD_LIBRARY_PATH=.:$(BOOST_LIB) ; ./$(EXE) $(RUN_OPT)
 
 clean:
 	@- $(RM) *.o *~ core $(EXE) *.so

@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -47,7 +47,7 @@ public:
     void Draw();
 private:
     Collaborator< Canvas > canvas;
-    Collaborator< Shape, collection > shapes;
+    Collaborator< Shape, collection<> > shapes;
 };
 
 #endif

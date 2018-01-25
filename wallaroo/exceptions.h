@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -37,6 +37,15 @@
 
 namespace wallaroo
 {
+namespace detail
+{
+    inline std::string FormatMsg(const std::string& msg, std::size_t line, std::size_t col)
+    {
+        std::ostringstream oss;
+        oss << "Line " << line << ", col " << col << ": " << msg;
+        return oss.str();
+    }
+} // detail
 
 /** Base class for all Wallaroo errors. Derives from
 * @c std::runtime_error. Call member function @c what to get human
@@ -199,6 +208,28 @@ public:
     }
 private:
     const std::string element;
+};
+
+
+/** Error indicating a lexical error scanning a configuration.
+*   Derives from WallarooError.
+*/
+class LexicalError : public WallarooError
+{
+public:
+    LexicalError(const std::string& msg, std::size_t line, std::size_t col) :
+        WallarooError(detail::FormatMsg(msg, line, col)) {}
+};
+
+/** Error indicating a syntax error parsing a configuration.
+*   Derives from WallarooError.
+*/
+class SyntaxError : public WallarooError
+{
+public:
+    /// Instantiate a SyntaxError
+    SyntaxError(const std::string& msg, std::size_t line, std::size_t col) :
+        WallarooError(detail::FormatMsg(msg, line, col)) {}
 };
 
 } // namespace

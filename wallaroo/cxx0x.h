@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -78,6 +78,7 @@
     #include <boost/function.hpp>
     #include <boost/make_shared.hpp>
     #include <boost/unordered_map.hpp>
+    #define nullptr 0
     namespace cxx0x = boost;
 #endif
 

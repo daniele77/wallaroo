@@ -1,3 +1,10 @@
+2018-01-25: Version 0.8.0
+
+        * Wal file format
+        * Add Catalog::Remove, Catalog::Clear, Catalog::Size
+        * Custom name for class registration
+        * Choice between shared and weak ptr for Collaborator
+
 2014-10-31: Version 0.7.0
 
         * Changed Syntax: Device -> Part, Plug -> Collaborator (close issue #1)

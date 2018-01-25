@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -45,7 +45,7 @@ ConsoleCanvas::ConsoleCanvas()
 void ConsoleCanvas::Point( unsigned int x, unsigned int y )
 {
     y = y * 70 / 100; // console form factor
-    if ( x >= 0 && x < X_SIZE && y >= 0 && y < Y_SIZE )
+    if ( x < X_SIZE && y < Y_SIZE )
         canvas[ x ][ y ] = FULL;
 }
 

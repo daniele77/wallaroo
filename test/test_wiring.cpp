@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -73,11 +73,13 @@ WALLAROO_REGISTER( B2 )
 class C2 : public Part
 {
 public:
-    C2() : x( "x", RegistrationToken() ) {}
-    virtual int F() { return x -> F(); }
+    C2() : x( "x", RegistrationToken() ), y( "y", RegistrationToken() ) {}
+    virtual int F() { return x->F(); }
+    virtual int G() { return y->F(); }
     virtual ~C2() {}
-private:
+
     Collaborator< I2 > x;
+    Collaborator< I2, mandatory, cxx0x::shared_ptr > y;
 };
 
 WALLAROO_REGISTER( C2 )
@@ -87,17 +89,17 @@ class D2 : public Part
 public:
     D2() : x( "x", RegistrationToken() ) {}
     virtual int F()
-    { 
+    {
         int sum = 0;
         for ( Container::iterator i = x.begin(); i != x.end(); ++i )
         {
-            sum += i -> lock() -> F();
+            sum += i->lock()->F();
         }
-        return sum; 
+        return sum;
     }
     virtual ~D2() {}
 private:
-    typedef Collaborator< I2, collection > Container;
+    typedef Collaborator< I2, collection<> > Container;
     Container x;
 };
 
@@ -106,33 +108,33 @@ WALLAROO_REGISTER( D2 )
 class E2 : public Part
 {
 public:
-    E2() : 
-      x1( "x1", RegistrationToken() ),
-      x2( "x2", RegistrationToken() ),
-      x3( "x3", RegistrationToken() )
+    E2() :
+        x1( "x1", RegistrationToken() ),
+        x2( "x2", RegistrationToken() ),
+        x3( "x3", RegistrationToken() )
     {}
     virtual int F()
-    { 
+    {
         int sum = 0;
         for ( Container1::iterator i = x1.begin(); i != x1.end(); ++i )
         {
-            sum += i -> lock() -> F();
+            sum += i->lock()->F();
         }
         for ( Container2::iterator i = x2.begin(); i != x2.end(); ++i )
         {
-            sum += i -> lock() -> F();
+            sum += i->lock()->F();
         }
         for ( Container3::iterator i = x3.begin(); i != x3.end(); ++i )
         {
-            sum += i -> lock() -> F();
+            sum += i->lock()->F();
         }
-        return sum; 
+        return sum;
     }
     virtual ~E2() {}
 private:
-    typedef Collaborator< I2, collection, std::list > Container1;
-    typedef Collaborator< I2, collection, std::vector > Container2;
-    typedef Collaborator< I2, collection, std::deque > Container3;
+    typedef Collaborator< I2, collection< std::list > > Container1;
+    typedef Collaborator< I2, collection< std::vector > > Container2;
+    typedef Collaborator< I2, collection< std::deque > > Container3;
     Container1 x1;
     Container2 x2;
     Container3 x3;
@@ -148,6 +150,7 @@ public:
 };
 
 WALLAROO_REGISTER( F2 )
+
 
 // tests
 
@@ -166,17 +169,35 @@ BOOST_AUTO_TEST_CASE( wiringOk )
     BOOST_REQUIRE_NO_THROW( catalog.Create( "c2", "C2" ) );
     BOOST_REQUIRE_NO_THROW( catalog[ "c2" ] );
 
+    shared_ptr< C2 > c1 = catalog[ "c1" ];
+    shared_ptr< C2 > c2 = catalog[ "c2" ];
+
+    // operator bool of Collaborator
+    BOOST_CHECK( ! c1 -> x );
+    BOOST_CHECK( ! c1 -> y );
+
     wallaroo_within( catalog )
     {
         BOOST_REQUIRE_NO_THROW( use( "b" ).as( "x" ).of( "c1" ) );
+        BOOST_REQUIRE_NO_THROW( use( "b" ).as( "y" ).of( "c1" ) );
         BOOST_REQUIRE_NO_THROW( use( "a" ).as( "x" ).of( "c2" ) );
+        BOOST_REQUIRE_NO_THROW( use( "a" ).as( "y" ).of( "c2" ) );
     }
 
-    shared_ptr< C2 > c1 = catalog[ "c1" ];
-    BOOST_CHECK( c1 -> F() == 10 );
+    // operator bool of Collaborator
+    BOOST_CHECK( c1 -> x );
+    BOOST_CHECK( c1 -> y );
 
-    shared_ptr< C2 > c2 = catalog[ "c2" ];
+    // operator shared_ptr() of Collaborator
+    shared_ptr< B2 > b = catalog[ "b" ];
+    BOOST_CHECK( static_cast< cxx0x::shared_ptr< I2 > >( c1 -> x ) == b );
+    BOOST_CHECK( static_cast< cxx0x::shared_ptr< I2 > >( c1 -> y ) == b );
+
+    // operator -> of Collaborator
+    BOOST_CHECK( c1 -> F() == 10 );
+    BOOST_CHECK( c1 -> G() == 10 );
     BOOST_CHECK( c2 -> F() == 5 );
+    BOOST_CHECK( c2 -> G() == 5 );
 }
 
 BOOST_AUTO_TEST_CASE( wiringKo )
@@ -361,10 +382,10 @@ BOOST_AUTO_TEST_CASE( containersWiring )
     using std::list;
     typedef weak_ptr< I2 > I2Ptr;
 
-    BOOST_STATIC_ASSERT((is_base_of< deque< I2Ptr >, Collaborator< I2, collection, deque > >::value));
-    BOOST_STATIC_ASSERT((is_base_of< list< I2Ptr >, Collaborator< I2, collection, list > >::value));
-    BOOST_STATIC_ASSERT((is_base_of< vector< I2Ptr >, Collaborator< I2, collection, vector > >::value));
-    BOOST_STATIC_ASSERT((is_base_of< vector< I2Ptr >, Collaborator< I2, collection > >::value)); // the default is std::vector
+    BOOST_STATIC_ASSERT((is_base_of< deque< I2Ptr >, Collaborator< I2, collection< deque > > >::value));
+    BOOST_STATIC_ASSERT((is_base_of< list< I2Ptr >, Collaborator< I2, collection< list > > >::value));
+    BOOST_STATIC_ASSERT((is_base_of< vector< I2Ptr >, Collaborator< I2, collection< vector > > >::value));
+    BOOST_STATIC_ASSERT((is_base_of< vector< I2Ptr >, Collaborator< I2, collection<> > >::value)); // the default is std::vector
 }
 
 BOOST_AUTO_TEST_CASE( checkCast )
@@ -388,10 +409,10 @@ BOOST_AUTO_TEST_CASE( checkCast )
     shared_ptr< F2 > f1 = catalog[ "f1" ];
     shared_ptr< F2 > f2 = catalog[ "f2" ];
 
-    BOOST_REQUIRE_NO_THROW( static_cast< shared_ptr< I2 > >( f1 -> collaborator ) );
-    BOOST_REQUIRE_NO_THROW( static_cast< const shared_ptr< I2 > >( f1 -> collaborator ) );
-    BOOST_REQUIRE_NO_THROW( static_cast< shared_ptr< I2 > >( f2 -> collaborator ) );
-    BOOST_REQUIRE_NO_THROW( static_cast< const shared_ptr< I2 > >( f2 -> collaborator ) );
+    BOOST_REQUIRE_NO_THROW( shared_ptr< I2 > x = static_cast< shared_ptr< I2 > >( f1 -> collaborator ) );
+    BOOST_REQUIRE_NO_THROW( shared_ptr< I2 > x = static_cast< const shared_ptr< I2 > >( f1 -> collaborator ) );
+    BOOST_REQUIRE_NO_THROW( shared_ptr< I2 > x = static_cast< shared_ptr< I2 > >( f2 -> collaborator ) );
+    BOOST_REQUIRE_NO_THROW( shared_ptr< I2 > x = static_cast< const shared_ptr< I2 > >( f2 -> collaborator ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -57,6 +57,8 @@ public:
         assert( part );
     }
 
+	// @throw ElementNotFound If @c collaboratorName does not exist in this part.
+    // @throw WrongType If @c destination has not a type compatible with the dependency.
     void Wire( const std::string& collaboratorName, const PartShell& destination ) const
     {
         part -> Wire( collaboratorName, destination.part );

@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -145,7 +145,8 @@ private:
 
     // this method should only be invoked by the dependencies of this part
     // to register itself into the dependencies table.
-    template < class T, class P, template < typename E, typename Allocator = std::allocator< E > > class Container > friend class Collaborator;
+    template < typename T, typename P, template < typename X > class Ownership >
+    friend class Collaborator;
     void Register( const std::string& id, Dependency* c )
     {
         dependencies[ id ] = c;
@@ -190,10 +191,6 @@ inline void Part::SetAttribute( const std::string& attribute, const std::string&
     // Optimization: with strings we don't need conversion
     SetStringAttribute( attribute, value );
 }
-
-#ifndef WALLAROO_REMOVE_DEPRECATED
-#define Device Part
-#endif
 
 } // namespace
 

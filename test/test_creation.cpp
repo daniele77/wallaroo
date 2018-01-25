@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -100,6 +100,15 @@ namespace Foo
 
 WALLAROO_REGISTER( Foo::E1 );
 
+
+class F1 : public Part
+{
+public:
+    int F() { return 5; }
+};
+
+WALLAROO_REGISTER_NAME( "MyF", F1 );
+
 // tests
 
 BOOST_AUTO_TEST_SUITE( Creation )
@@ -195,6 +204,31 @@ BOOST_AUTO_TEST_CASE( namespaceRegistration )
     BOOST_REQUIRE_NO_THROW( e_bis = catalog[ "e" ] );
     BOOST_CHECK( e -> GetX() == 9 );
     BOOST_CHECK( e == e_bis );
+}
+
+BOOST_AUTO_TEST_CASE( containerRemoveAndErase )
+{
+    Catalog catalog;
+
+    BOOST_REQUIRE_NO_THROW( catalog.Create( "x", "A1" ) );
+    BOOST_REQUIRE_NO_THROW( catalog[ "x" ] );
+    BOOST_REQUIRE_NO_THROW( catalog.Remove( "x" ) );
+    BOOST_CHECK_THROW( catalog.Remove( "x" ), ElementNotFound );
+    BOOST_CHECK_THROW( catalog[ "x" ], ElementNotFound );
+
+    BOOST_REQUIRE_NO_THROW( catalog.Create( "x", "B1", 0, std::string() ) );
+    BOOST_REQUIRE_NO_THROW( catalog.Create( "y", "C1", 1.0 ) );
+    catalog.Clear();
+    BOOST_CHECK_THROW( catalog[ "x" ], ElementNotFound );
+    BOOST_CHECK_THROW( catalog[ "y" ], ElementNotFound );
+    BOOST_CHECK( catalog.Size() == 0 );
+}
+
+BOOST_AUTO_TEST_CASE( customNameCreationOk )
+{
+    Catalog catalog;
+    BOOST_REQUIRE_NO_THROW( catalog.Create( "f", "MyF" ) );
+    BOOST_REQUIRE_NO_THROW( catalog[ "f" ] );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

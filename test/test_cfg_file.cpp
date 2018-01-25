@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -125,14 +125,15 @@ namespace Foo
         int F() const
         {
             int sum = 0;
-            for ( Collaborator< I5, collection >::const_iterator i = container.begin(); i != container.end(); ++i )
+            for ( Container::const_iterator i = container.begin(); i != container.end(); ++i )
             {
                 sum += i->lock()->F();
             }
             return sum;
         }
     private:
-        Collaborator< I5, collection > container;
+        typedef Collaborator< I5, collection<> > Container;
+        Container container;
         const std::string s;
         const int ii;
     };

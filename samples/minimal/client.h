@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -48,8 +48,8 @@ public:
 private:
     Collaborator< Interface > relation;
     Collaborator< Interface, optional > optionalRelation;
-    Collaborator< Interface, collection > relationVector; // std::vector by default
-    Collaborator< Interface, collection, std::list > relationList; // you can specify a different container
+    Collaborator< Interface, collection<> > relationVector; // std::vector by default
+    Collaborator< Interface, collection< std::list > > relationList; // you can specify a different container
     Collaborator< Interface, bounded_collection< 1, 10 > > relationBoundedVector; // you can specify the range 
 };
 

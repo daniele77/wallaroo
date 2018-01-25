@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -375,7 +375,7 @@ static void TestContent( Catalog& catalog )
 
     shared_ptr< B7 > b1 = catalog[ "b1" ];
     BOOST_CHECK( b1->schAtt == 'z' );
-    BOOST_CHECK( b1->uchAtt == 'x' );
+    BOOST_CHECK( b1->uchAtt == 210 );
     BOOST_CHECK( b1->ssiAtt == -6000 );
     BOOST_CHECK( b1->usiAtt == 6000 );
     BOOST_CHECK( b1->siAtt == -333333 );

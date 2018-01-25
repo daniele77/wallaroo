@@ -3,7 +3,7 @@
  * Copyright (C) 2012 Daniele Pallastrelli
  *
  * This file is part of wallaroo.
- * For more information, see http://wallaroo.googlecode.com/
+ * For more information, see http://wallaroolib.sourceforge.net/
  *
  * Boost Software License - Version 1.0 - August 17th, 2003
  *
@@ -52,10 +52,8 @@ void Client::G()
 
     relation -> F();
 
-    for ( 
-        Collaborator< Interface, collection, std::list >::iterator i = relationList.begin();
-        i != relationList.end();
-        ++i )
+    typedef Collaborator< Interface, collection< std::list > >::iterator Iterator;
+    for (  Iterator i = relationList.begin(); i != relationList.end(); ++i )
     {
         cxx0x::shared_ptr< Interface > s = i -> lock();
         if ( s ) 
