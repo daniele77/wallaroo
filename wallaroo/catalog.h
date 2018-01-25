@@ -109,7 +109,7 @@ public:
         if ( parts.erase( id ) != 1 ) throw ElementNotFound( id );
     }
 
-    /** Remove all elements in the catalog */
+    /** Remove all elements of the catalog */
     void Clear() { parts.clear(); }
 
     /** Returns the number of the elements contained in the catalog.
@@ -252,13 +252,18 @@ public:
       attribute( _attribute )
     {
     }
+    // throw ElementNotFound If @c attribute does not exist in @c srcClass.
+    // throw WrongType If @c destClass has not a type compatible with the dependency.
     void of( const detail::PartShell& srcClass )
     {
         // perform the final assignment:
         srcClass.Wire( attribute, destClass );
     }
     // throw CatalogNotSpecified if the current catalog has not been selected with wallaroo_within
-    void of ( const std::string& srcClass )
+    // throw ElementNotFound If @c attribute does not exist in this part or 
+	//       if @c srcClass key is not found in the current catalog.
+    // throw WrongType If @c destClass has not a type compatible with the dependency.
+    void of( const std::string& srcClass )
     {
         // default container case
         Catalog* current = Catalog::Current();
@@ -318,6 +323,8 @@ class SetOfExpression
 public:
     SetOfExpression( const detail::PartShell& _part, const std::string& _attribute ) :
         part( _part ), attribute( _attribute ) {}
+    // throw ElementNotFound If attribute does not exist in this part.
+    // throw WrongType If @c value has not a type compatible with the attribute.
     template < typename T >
     void to( const T& value )
     {

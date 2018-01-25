@@ -39,7 +39,7 @@ wallaroo\ .......................................The “wallaroo root directory”
       boost_only\.....................This example uses boost instead of C++0x
       mineplant\ ............A "control system" example using XmlConfiguration
       roulette\.A roulette simulation, using multiple catalogs and shared libs
-      shapes\.....A drawing sample, using XmlConfiguration & JsonConfiguration
+      shapes\.........A drawing sample, using Wal, Xml and Json configurations
       ...more samples...
    test\ ............ Automatic tests of the library (for wallaroo developers)
    doc\ .....................................A subset of Wallaroo library docs
@@ -95,7 +95,7 @@ features) you can specify the boost library path in the following ways:
 * GNU Make
         make CXXFLAGS=-I<boost_path>
     example:
-        make CXXFLAGS=-I/opt/boost_1_50_0/
+        make CXXFLAGS=-I/opt/boost_1_66_0/
 
 * Windows nmake
     Set the environment variable BOOST.

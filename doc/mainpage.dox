@@ -51,15 +51,15 @@ or, inside a clause \ref wallaroo_within, the syntax:
 
 If you prefer, you can perform object creation, dependency injection and
 attribute setting from one (or many)
-external configuration file in XML or JSON format.
-See wallaroo::XmlConfiguration and wallaroo::JsonConfiguration.
+external configuration file in WAL, XML, or JSON format.
+See wallaroo::Configuration, wallaroo::XmlConfiguration, wallaroo::JsonConfiguration.
 
 You can define your classes in shared libraries. In this case,
 you must use \ref WALLAROO_DYNLIB_REGISTER
 instead and load the shared library with \ref wallaroo::Plugin::Load.
 
-Loading of shared libraries can be performed by specifying the name in the XML
+Loading of shared libraries can be performed by specifying the name in the WAL, XML
 or JSON configuration files.
-See the methods wallaroo::XmlConfiguration::LoadPlugins and 
+See the methods wallaroo::Configuration::LoadPlugins, wallaroo::XmlConfiguration::LoadPlugins and 
 wallaroo::JsonConfiguration::LoadPlugins.
  */

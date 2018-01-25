@@ -1,4 +1,4 @@
-<date>: <version>
+2018-01-25: Version 0.8.0
 
         * Wal file format
         * Add Catalog::Remove, Catalog::Clear, Catalog::Size

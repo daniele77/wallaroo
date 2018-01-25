@@ -44,12 +44,66 @@
 namespace wallaroo
 {
 
+/**
+* This class can parse a configuration written in WAL format,
+* by reading the content from a file or from a std::istream,
+* containing a list of objects to be created and their wiring.
+* Then it can populate a @c Catalog with that objects.
+* The syntax of the wal file should be similar to:
+\code
+
+# this is a comment
+
+@load "plugin";  # load the dynamic library named "plugin.so" or "plugin.dll"
+
+a = new A8;      # create a new object of class A8
+a1 = new A8();   # idem
+b = new B8(  att_int=10);  # create an object of class B8 assigning an attribute
+c1 = new C8(att_ui=10);
+c2 = new C8(att_ui=10);
+d = new Foo::D8(att_string="mystring",att_int=34);
+e = new E8( att1=5, att2=3.14 );
+f = new F8(att1=3.14,att2=false);
+g = new G8(att1=false,att2=true);
+h = new H8(att1=1.0, att2=-2.0);
+l = new L8(att1=-100, att2="foo bar");
+m = new M8(att1=-2000000000, att2='a');
+n = new N8(att1='b',att2=200);
+o_double = new O8<double>;
+o_int = new O8<int>;
+p = new P5;
+q = new Q5;
+
+c1.x=a;			# link "x" collaborator of the object "c1" to the part "a"
+c2.x=b;
+d.container=a;
+d.container=b;
+
+\endcode
+
+* The syntax in Backus-Naur form is the following:
+\code
+
+    <start>          ::=   <list> <done>
+    <list>           ::=   <statement> ";" <list> | <empty>
+    <statement>      ::=   <loadexpr> | <assignexpr>
+    <loadexpr>       ::=   "@load" <value>
+    <assignexpr>     ::=   <id> "=" "create" <id> <optparamlist> | <id> <depexpr>
+    <optparamlist>   ::=   <empty> | "(" <attrlist> ")"
+    <attrlist>       ::=   <empty> | <attrassign> <moreattrassign>
+    <attrassign>     ::=   <id> "=" <value>
+    <moreattrassign> ::=   <empty> | attrsep <attrassign>    
+    <depexpr>        ::=   "." <id> "=" <id>
+
+\endcode
+*/
 class Configuration
 {
 public:
     /** Create a Configuration from the path specified as parameter.
-    * @param fileName The path of the file to parse
-    * @throw WrongFile If the file does not exist or its format is wrong.
+    * @param fileName The path of the file to parse.
+    * @throw WrongFile If the file does not exist.
+	* @throw SyntaxError If the content is invalid.
     */
     explicit Configuration( const std::string& file ) 
     {
@@ -59,14 +113,19 @@ public:
         g.Parse();
     }
 
+    /** Create a Configuration from the std::istream specified as parameter.
+    * @param s The input stream to parse
+    * @throw SyntaxError If the content is invalid.
+    */
     explicit Configuration( std::istream& s )
     {
         detail::Grammar< Configuration > g( s, *this );
         g.Parse();
     }
 
-    // Load the shared libraries specified in the parsed file.
-    // throw WrongFile if one of the file specified does not exists or its format is wrong
+    /** Load the plugins (shared libraries) specified in the configuration.
+    * @throw WrongFile if one of the file specified does not exists or its format is wrong
+    */
     void LoadPlugins()
     {
         for ( std::size_t i = 0; i < libraries.size(); ++i )
@@ -75,6 +134,12 @@ public:
         }
     }
 
+    /** Fill the @c catalog with the objects and relations specified in the file.
+     * @param catalog The catalog target of the new items of the file.
+     * @throw DuplicatedElement If more elements share the same name.
+     * @throw ElementNotFound If the configuration use a class name not registered or an object not created.
+     * @throw WrongType If an assignment (attribute or dependency) has type mismatch.
+     */
     void Fill( Catalog& catalog ) 
     {
         for ( std::size_t i = 0; i < objects.size(); ++i )

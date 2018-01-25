@@ -57,6 +57,8 @@ public:
         assert( part );
     }
 
+	// @throw ElementNotFound If @c collaboratorName does not exist in this part.
+    // @throw WrongType If @c destination has not a type compatible with the dependency.
     void Wire( const std::string& collaboratorName, const PartShell& destination ) const
     {
         part -> Wire( collaboratorName, destination.part );
