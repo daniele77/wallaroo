@@ -68,7 +68,7 @@ wallaroo\ .......................................The ï¿½wallaroo root directoryï
       boost_only\.....................This example uses boost instead of C++0x
       mineplant\ ............A "control system" example using XmlConfiguration
       roulette\.A roulette simulation, using multiple catalogs and shared libs
-      shapes\.....A drawing sample, using XmlConfiguration & JsonConfiguration
+      shapes\.........A drawing sample, using Wal, Xml and Json configurations
       ...more samples...
    test\ ............ Automatic tests of the library (for wallaroo developers)
    doc\ .....................................A subset of Wallaroo library docs
